@@ -3,12 +3,12 @@ from .models import Advertisement
 
 # Register your models here.
 class AdvertisementAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'description', 'price', 'location', 'created_date', 'updated_date', 'auction']
+    list_display = ['title', 'price', 'created_date', 'updated_date', 'auction', 'display_photo']
     list_filter = ['price', 'location', 'auction']
     actions = ['forbid_the_action', 'permit_the_action']
     fieldsets = (
         ('Общее', {
-            'fields' : ('title', 'description', 'location', 'category')
+            'fields' : ('title', 'description', 'photo', 'location', 'category', 'user')
         }),
         ('Финансы', {
             'fields' : ('price', 'auction'),
