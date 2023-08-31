@@ -1,7 +1,8 @@
 from .forms import RegistrationForm
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 def register(request):
     if request.method == 'POST':
@@ -32,6 +33,7 @@ def logIn(request):
 def profile(request):
     return render(request, 'auth_app/profile.html')
 
+@login_required(login_url=reverse_lazy('login'))
 def profileView(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -39,6 +41,7 @@ def profileView(request):
         else:
             return redirect(reverse('login'))
     
+@login_required(login_url=reverse_lazy('login'))
 def logOut(request):
     logout(request)
     return redirect(reverse('login'))

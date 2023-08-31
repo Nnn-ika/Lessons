@@ -1,17 +1,25 @@
 from django.shortcuts import render, redirect
+from django.db.models import Count
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from .forms import AdvertisementForm
 from .models import Advertisement
-from django.utils.html import format_html
 
-# Create your views here.
+User = get_user_model()
+
 def index(request):
-    advertisement = Advertisement.objects.all()
-    context = {'advertisement' : advertisement}
+    title = request.GET.get('query')
+    if title:
+        advertisement = Advertisement.objects.filter(title__icontains=title)
+    else:
+        advertisement = Advertisement.objects.all()
+    context = {'advertisement' : advertisement, 'title' : title}
     return render(request, 'adverts_app/index.html', context)
 
 def topSellers(request):
-    return render(request, 'adverts_app/top-sellers.html')
+    users = User.objects.annotate(adv_count=Count('advertisement')).order_by('-adv_count')
+    context = {'users' : users}
+    return render(request, 'adverts_app/top-sellers.html', context)
 
 def advertisementPost(request):
     if request.method == "POST":
@@ -30,5 +38,7 @@ def advertisementPost(request):
     context = {'form' : form}
     return render(request, 'adverts_app/advertisement-post.html', context)
 
-def advertisement(request):
-    return render(request, 'adverts_app/advertisement.html')
+def advertisementDetails(request, pk):
+    advertisement = Advertisement.objects.get(id=pk)
+    context = {'advertisement' : advertisement}
+    return render(request, 'adverts_app/advertisement.html', context)
