@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'my_adverts',
     'homework_4',
+    'auth_app',
 ]
 
 MIDDLEWARE = [

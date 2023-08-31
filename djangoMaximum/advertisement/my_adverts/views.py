@@ -8,10 +8,10 @@ from django.utils.html import format_html
 def index(request):
     advertisement = Advertisement.objects.all()
     context = {'advertisement' : advertisement}
-    return render(request, 'index.html', context)
+    return render(request, 'adverts_app/index.html', context)
 
 def topSellers(request):
-    return render(request, 'top-sellers.html')
+    return render(request, 'adverts_app/top-sellers.html')
 
 def advertisementPost(request):
     if request.method == "POST":
@@ -24,21 +24,11 @@ def advertisementPost(request):
                 advertisement = Advertisement(**form.cleaned_data)
                 advertisement.user = request.user
                 advertisement.save()
-                url = reverse('main_page')
-                return redirect(url)
+                return redirect(reverse('main_page'))
     else:
         form = AdvertisementForm()
     context = {'form' : form}
-    return render(request, 'advertisement-post.html', context)
-
-def register(request):
-    return render(request, 'register.html')
-
-def login(request):
-    return render(request, 'login.html')
-
-def profile(request):
-    return render(request, 'profile.html')
+    return render(request, 'adverts_app/advertisement-post.html', context)
 
 def advertisement(request):
-    return render(request, 'advertisement.html')
+    return render(request, 'adverts_app/advertisement.html')
